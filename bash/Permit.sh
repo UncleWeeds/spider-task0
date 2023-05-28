@@ -1,7 +1,6 @@
 #!/bin/bash
 
-if [[ "${UID}" -ne 0 ]]
-then
+if [[ "${UID}" -ne 0 ]]; then
    echo "Please use this as an Admin my friend" >&2
    exit 1
 fi
@@ -16,44 +15,44 @@ done
 while IFS= read -r line; do
 username=$(echo "$line" | awk '{print $1}')
 who=$(echo "$line" | awk '{print $2}')
-#-------------------------------------------------------------------------------------------------
-if [ "$who" = "Patient" ]; then
-    chown -R "$username:$username" "/home/$username/Patient"
+
+#-------------------------------------------------------------------------------------------------Patient
+
+   if [ "$who" = "Patient" ]; then
+      chown -R "$username:$username" "/home/$username/Patient"
     
-while IFS= read -r line; do
-    username1=$(echo "$line" | awk '{print $1}')
-    setfacl  -m u:$username:rw "/home/$username1/Doctor/Appointment.txt" &>/dev/null
-    setfacl  -m u:$username:rw "/home/$username1/Doctor/Available.txt" &>/dev/null
+          while IFS= read -r line; do
+               username1=$(echo "$line" | awk '{print $1}')
+               setfacl  -m u:$username:rw "/home/$username1/Doctor/Appointment.txt" &>/dev/null
+               setfacl  -m u:$username:rw "/home/$username1/Doctor/Available.txt" &>/dev/null
+               setfacl  -m u:$username:rwx "/home/$username1" &>/dev/null
 
-    setfacl  -m u:$username:rwx "/home/$username1" &>/dev/null
+          done < /home/Hospital_Server/userDetails.txt
 
-done < /home/Hospital_Server/userDetails.txt
+          for admin in "${wing_admins[@]}"; do
+          setfacl -R -m u:$username:rwx "/home/Hospital_Server/$admin" &>/dev/null
 
-declare -a wing_admins=("wing_a" "wing_b" "wing_c")
-for admin in "${wing_admins[@]}"; do
-setfacl -R -m u:$username:rwx "/home/Hospital_Server/$admin" &>/dev/null
+          done
 
-done
-#---------------------------------------------------------------------------------------------------
-elif [ "$who" = "Doctor" ]; then
-    chown -R "$username:$username" "/home/$username/Doctor"
-    chmod 600 "/home/$username/Doctor/Available.txt"
+#-------------------------------------------------------------------------------------------------Doctor
 
-while IFS= read -r line; do
-    username1=$(echo "$line" | awk '{print $1}')
-    setfacl -R -m u:$username:rwx "/home/$username1" &>/dev/null
-    setfacl -R -m u:$username:rwx "/home/$username1/Patient/PatientDetails.txt" &>/dev/null
-    setfacl -R -m u:$username:rwx "/home/$username1/Patient/Prescription.txt" &>/dev/null
-done < /home/Hospital_Server/userDetails.txt
+    elif [ "$who" = "Doctor" ]; then
+       chown -R "$username:$username" "/home/$username/Doctor"
+       chmod 600 "/home/$username/Doctor/Available.txt"
 
-declare -a wing_admins=("wing_a" "wing_b" "wing_c")
+            while IFS= read -r line; do
+                  username1=$(echo "$line" | awk '{print $1}')
+                  setfacl -R -m u:$username:rwx "/home/$username1" &>/dev/null
+                  setfacl -R -m u:$username:rwx "/home/$username1/Patient/PatientDetails.txt" &>/dev/null
+                  setfacl -R -m u:$username:rwx "/home/$username1/Patient/Prescription.txt" &>/dev/null
+             done < /home/Hospital_Server/userDetails.txt
 
-for admin in "${wing_admins[@]}"; do
-setfacl -R -m u:$username:rwx "/home/Hospital_Server/$admin" &>/dev/null
-setfacl -R -m u:$username:rwx "/home/Hospital_Server/$admin/wingConditions.txt" &>/dev/null
+             for admin in "${wing_admins[@]}"; do
+                  setfacl -R -m u:$username:rwx "/home/Hospital_Server/$admin" &>/dev/null
+                  setfacl -R -m u:$username:rwx "/home/Hospital_Server/$admin/wingConditions.txt" &>/dev/null
 
-done
-fi    
+             done
+    fi    
 
 done < /home/Hospital_Server/userDetails.txt
 
