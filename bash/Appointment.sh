@@ -45,7 +45,7 @@ if [[ "$job" == "Doctor" ]]; then
 
         # Removes the booked appointment time from the available slots
         sed -i "/$remove_time/d" "$doctor_dir/Available.txt"
-       	echo "Appointment time slot removed successfully!"
+       	echo "Appointment time slot removed successfully!" &>/dev/null
      fi
      fi
      

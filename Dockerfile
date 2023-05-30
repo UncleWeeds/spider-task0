@@ -1,5 +1,12 @@
 FROM python:3.8-slim
 
+RUN apt-get update && \
+    apt-get install -y acl
+
+WORKDIR /home/Hospital_Server/bash
+
+COPY bash /home/Hospital_Server/bash
+
 WORKDIR /app
 
 COPY requirements.txt ./

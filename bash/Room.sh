@@ -1,5 +1,12 @@
 #!/bin/bash
 
+myname=$(whoami)
+
+ if [[ "$myname" != "wing_a" && "$myname" != "wing_b" && "$myname" != "wing_c" ]]; then
+        echo "Invalid user specified. Only ward_a, ward_b, and ward_c are allowed."
+        exit 1
+    fi
+
 is_wing_full() {
     local wing="$1"
     local num_patients=$(ls -1 "/home/Hospital_Server/$wing/Patient" 2>/dev/null | wc -l)
