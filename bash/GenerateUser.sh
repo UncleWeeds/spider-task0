@@ -9,7 +9,7 @@ read -p "Please enter your name: " name
 echo "Name: $name"
 
 #Checks if the name already exists
-if id "$name" >/dev/null 2>&1; then
+if id "$name" &>/dev/null; then
     echo "User $name already exists."
     exit 1
 fi
