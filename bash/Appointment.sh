@@ -81,7 +81,7 @@ if [[ "$job" == "Patient" ]]; then
 	    echo "$appointment_time $wing $name" >> "$appointment_file"
 
 	    # Remove the booked appointment time from the available slots
-            sed -i "/$appointment_time/d" "$doctor_dir/Available.txt"
+            sed -i "/$appointment_time/d" "$doctor_dir/Available.txt" &>/dav/null
 	 
       fi
          else
