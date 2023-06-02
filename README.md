@@ -22,4 +22,4 @@ This is where the scripts are located.
 To run a script, use the ./"ScriptName" command.
 
 Replace "ScriptName" with the name of the script you want to execute.
-We hope you find this information helpful! Should you have any further queries or require assistance, feel free to ask.
+I hope you find this information helpful!
